@@ -1,0 +1,86 @@
+import { FreightRate } from "@/lib/api";
+
+type RateRowProps = {
+  rate: FreightRate;
+  isEven: boolean;
+};
+
+const CARRIER_STYLES: Record<string, { bg: string; border: string; color: string }> = {
+  Maersk: { bg: "rgba(63,158,160,0.1)", border: "rgba(63,158,160,0.25)", color: "#3f9ea0" },
+  MSC: { bg: "rgba(212,168,75,0.1)", border: "rgba(212,168,75,0.25)", color: "#d4a84b" },
+  "CMA CGM": { bg: "rgba(107,158,201,0.1)", border: "rgba(107,158,201,0.25)", color: "#6b9ec9" },
+  COSCO: { bg: "rgba(201,107,90,0.1)", border: "rgba(201,107,90,0.25)", color: "#c96b5a" },
+  "Hapag-Lloyd": { bg: "rgba(90,184,158,0.1)", border: "rgba(90,184,158,0.25)", color: "#5ab89e" },
+  Evergreen: { bg: "rgba(63,158,160,0.1)", border: "rgba(63,158,160,0.25)", color: "#3f9ea0" },
+  ONE: { bg: "rgba(212,168,75,0.1)", border: "rgba(212,168,75,0.25)", color: "#d4a84b" },
+};
+
+export function RateRow({ rate, isEven }: RateRowProps) {
+  const style = CARRIER_STYLES[rate.carrier] || { bg: "rgba(255,255,255,0.03)", border: "rgba(255,255,255,0.08)", color: "#8b9aab" };
+  const isExpired = new Date(rate.valid_date) < new Date();
+
+  return (
+    <div
+      className="ledger-row grid grid-cols-12 items-center px-6 py-5 border-t"
+      style={{
+        borderColor: "var(--hairline)",
+        background: isEven ? "rgba(255,255,255,0.02)" : "transparent",
+      }}
+    >
+      {/* Route */}
+      <div className="col-span-12 sm:col-span-4 mb-2 sm:mb-0">
+        <div className="font-semibold text-[15px] flex items-center gap-1.5 flex-wrap">
+          <span>{rate.origin_port}</span>
+          <span style={{ color: "var(--teal)", fontWeight: 800 }}>→</span>
+          <span>{rate.destination_port}</span>
+        </div>
+        <div className="text-[10px] mt-1 uppercase tracking-widest font-medium" style={{ color: "var(--ink-faint)" }}>
+          Shipping Route
+        </div>
+      </div>
+
+      {/* Carrier */}
+      <div className="col-span-6 sm:col-span-2 mb-2 sm:mb-0">
+        <span className="badge text-[11px]" style={{ background: style.bg, color: style.color, border: `1px solid ${style.border}` }}>
+          {rate.carrier}
+        </span>
+      </div>
+
+      {/* Container */}
+      <div className="col-span-6 sm:col-span-2 mb-2 sm:mb-0">
+        <span className="badge font-mono-data text-[11px]" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid var(--hairline)", color: "var(--ink)" }}>
+          {rate.container_type}
+        </span>
+      </div>
+
+      {/* Valid Date */}
+      <div className="col-span-6 sm:col-span-2">
+        <div className="flex items-center gap-2">
+          <span className="font-mono-data text-sm font-medium" style={{ color: isExpired ? "var(--coral)" : "var(--ink-dim)" }}>
+            {rate.valid_date}
+          </span>
+          {isExpired && (
+            <span className="text-[9px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded-full" style={{ background: "rgba(201,107,90,0.1)", color: "var(--coral)", border: "1px solid rgba(201,107,90,0.2)" }}>
+              Exp
+            </span>
+          )}
+        </div>
+        <div className="text-[10px] uppercase tracking-widest mt-1 font-medium" style={{ color: "var(--ink-faint)" }}>
+          Valid Until
+        </div>
+      </div>
+
+      {/* Rate */}
+      <div className="col-span-6 sm:col-span-2 text-right">
+        <div className="font-mono-data text-lg font-bold tracking-tight" style={{ color: "var(--brass)" }}>
+          {rate.currency} {rate.rate.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+        </div>
+        <div className="text-[10px] uppercase tracking-widest mt-1 font-medium" style={{ color: "var(--ink-faint)" }}>
+          Freight Rate
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default RateRow;
