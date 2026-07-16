@@ -164,6 +164,11 @@ export default function LedgerPage() {
       toast.error("Could not connect to API. Displaying demo data.");
     }
   }, []);
+
+  useEffect(() => {
+    fetchRates();
+  }, [fetchRates]);
+  
   useEffect(() => {
     const fetchLiveData = async () => {
       const [rate, ships, market] = await Promise.all([
@@ -185,12 +190,11 @@ export default function LedgerPage() {
       setWeather(weatherData);
     };
 
-    fetchRates();
     fetchLiveData();
 
     const interval = setInterval(fetchLiveData, 30000);
     return () => clearInterval(interval);
-  }, [selectedPort, fetchRates]);
+  }, [selectedPort]);
 
   const filteredRates = useMemo(() => {
     return rates.filter((rate) => {
