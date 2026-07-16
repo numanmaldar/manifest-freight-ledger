@@ -90,63 +90,63 @@ export default function NewRatePage() {
         <div className="px-8 py-8">
           <form onSubmit={handleSubmit}>
             {/* Section 1: Route */}
-            <div className="flex items-center gap-3 mb-6 pb-3 border-b" style={{ borderColor: "var(--hairline)" }}>
-              <span className="text-[11px] uppercase tracking-widest px-2.5 py-1 rounded-md font-medium" style={{ border: "1px solid rgba(212,168,75,0.2)", color: "var(--brass)", background: "rgba(212,168,75,0.04)" }}>
+            <div className="flex items-center gap-3 pb-3 mb-6 border-b border-b-[var(--hairline)]">
+              <span className="text-[11px] uppercase tracking-widest px-2.5 py-1 font-medium rounded-md border border-[rgba(212,168,75,0.2)] bg-[rgba(212,168,75,0.04)] text-[var(--brass)]">
                 Shipment Route
               </span>
-              <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, var(--hairline), transparent)" }} />
+              <div className="flex-1 h-px bg-gradient-to-r from-[var(--hairline)] to-transparent" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5 mb-8">
               <div>
-                <label className={`${label} mb-2 block`} style={{ color: "var(--ink-dim)" }}>Origin port</label>
+                <label className={`${label} mb-2 block text-[var(--ink-dim)]`}>Origin port</label>
                 <input required value={form.origin_port} onChange={(e) => update("origin_port", e.target.value)} placeholder="Jebel Ali" className={field} />
               </div>
               <div>
-                <label className={`${label} mb-2 block`} style={{ color: "var(--ink-dim)" }}>Destination port</label>
+                <label className={`${label} mb-2 block text-[var(--ink-dim)]`}>Destination port</label>
                 <input required value={form.destination_port} onChange={(e) => update("destination_port", e.target.value)} placeholder="Rotterdam" className={field} />
               </div>
             </div>
 
             {/* Section 2: Carrier */}
-            <div className="flex items-center gap-3 mb-6 pb-3 border-b" style={{ borderColor: "var(--hairline)" }}>
-              <span className="text-[11px] uppercase tracking-widest px-2.5 py-1 rounded-md font-medium" style={{ border: "1px solid rgba(212,168,75,0.2)", color: "var(--brass)", background: "rgba(212,168,75,0.04)" }}>
+            <div className="flex items-center gap-3 pb-3 mb-6 border-b border-b-[var(--hairline)]">
+              <span className="text-[11px] uppercase tracking-widest px-2.5 py-1 font-medium rounded-md border border-[rgba(212,168,75,0.2)] bg-[rgba(212,168,75,0.04)] text-[var(--brass)]">
                 Carrier & Cargo
               </span>
-              <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, var(--hairline), transparent)" }} />
+              <div className="flex-1 h-px bg-gradient-to-r from-[var(--hairline)] to-transparent" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5 mb-8">
               <div>
-                <label className={`${label} mb-2 block`} style={{ color: "var(--ink-dim)" }}>Carrier</label>
+                <label className={`${label} mb-2 block text-[var(--ink-dim)]`}>Carrier</label>
                 <input required value={form.carrier} onChange={(e) => update("carrier", e.target.value)} placeholder="Maersk" className={field} />
               </div>
               <div>
-                <label className={`${label} mb-2 block`} style={{ color: "var(--ink-dim)" }}>Container type</label>
+                <label className={`${label} mb-2 block text-[var(--ink-dim)]`}>Container type</label>
                 <select value={form.container_type} onChange={(e) => update("container_type", e.target.value)} className={`${field} cursor-pointer`}>
                   {CONTAINER_TYPES.map((c) => (
-                    <option key={c} value={c} style={{ backgroundColor: "var(--hull-raised)", color: "var(--ink)" }}>{c}</option>
+                    <option key={c} value={c} className="bg-[var(--hull-raised)] text-[var(--ink)]">{c}</option>
                   ))}
                 </select>
               </div>
             </div>
 
             {/* Section 3: Rate */}
-            <div className="flex items-center gap-3 mb-6 pb-3 border-b" style={{ borderColor: "var(--hairline)" }}>
-              <span className="text-[11px] uppercase tracking-widest px-2.5 py-1 rounded-md font-medium" style={{ border: "1px solid rgba(212,168,75,0.2)", color: "var(--brass)", background: "rgba(212,168,75,0.04)" }}>
+            <div className="flex items-center gap-3 pb-3 mb-6 border-b border-b-[var(--hairline)]">
+              <span className="text-[11px] uppercase tracking-widest px-2.5 py-1 font-medium rounded-md border border-[rgba(212,168,75,0.2)] bg-[rgba(212,168,75,0.04)] text-[var(--brass)]">
                 Rate & Validity
               </span>
-              <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, var(--hairline), transparent)" }} />
+              <div className="flex-1 h-px bg-gradient-to-r from-[var(--hairline)] to-transparent" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-5 mb-8">
               <div>
-                <label className={`${label} mb-2 block`} style={{ color: "var(--ink-dim)" }}>Valid date</label>
+                <label className={`${label} mb-2 block text-[var(--ink-dim)]`}>Valid date</label>
                 <input type="date" required value={form.valid_date} onChange={(e) => update("valid_date", e.target.value)} className={`${field} font-mono-data`} />
               </div>
               <div>
-                <label className={`${label} mb-2 block`} style={{ color: "var(--ink-dim)" }}>Rate</label>
+                <label className={`${label} mb-2 block text-[var(--ink-dim)]`}>Rate</label>
                 <input type="number" step="0.01" required value={form.rate} onChange={(e) => update("rate", e.target.value)} placeholder="1850.00" className={`${field} font-mono-data`} />
               </div>
               <div>
-                <label className={`${label} mb-2 block`} style={{ color: "var(--ink-dim)" }}>Currency</label>
+                <label className={`${label} mb-2 block text-[var(--ink-dim)]`}>Currency</label>
                 <input required value={form.currency} onChange={(e) => update("currency", e.target.value.toUpperCase())} maxLength={3} className={`${field} font-mono-data`} />
               </div>
             </div>
