@@ -2,7 +2,6 @@
 
 import { FreightRate } from "@/lib/api";
 import { CARRIER_STYLES } from "@/lib/constants";
-import Link from "next/link";
 import { PencilIcon, TrashIcon } from "./icons";
 import { Sparkline } from "./Sparkline";
 
@@ -48,9 +47,6 @@ export function RateCard({ rate, history = [], index = 0, onDelete }: Props) {
 
       {/* Action Buttons - Appear on Hover */}
       <div className="absolute top-4 right-4 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        <Link href={`/rates/${rate.id}/edit`} className="p-2 rounded-md transition-colors bg-black/10 hover:bg-black/30 backdrop-blur-sm" title="Edit Rate">
-          <PencilIcon className="w-4 h-4 text-[var(--ink-dim)]" />
-        </Link>
         <button onClick={() => onDelete(rate.id)} className="p-2 rounded-md transition-colors bg-black/10 hover:bg-black/30 backdrop-blur-sm" title="Delete Rate">
           <TrashIcon className="w-4 h-4 text-[var(--coral)]" />
         </button>
