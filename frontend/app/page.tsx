@@ -145,7 +145,6 @@ export default function LedgerPage() {
   const [activeCarrier, setActiveCarrier] = useState("All");
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
   const [mounted, setMounted] = useState(false);
-
   const [exchangeRate, setExchangeRate] = useState<{ rate: number; date: string } | null>(null);
   const [vessels, setVessels] = useState<VesselPosition[]>([]);
   const [congestion, setCongestion] = useState<PortCongestion[]>([]);
@@ -153,7 +152,6 @@ export default function LedgerPage() {
   const [weather, setWeather] = useState<PortWeather[]>([]);
   const [selectedPort, setSelectedPort] = useState("Rotterdam");
   const [showMap, setShowMap] = useState(false);
-
   const fetchRates = useCallback(async () => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8000"}/rates`);
@@ -167,7 +165,6 @@ export default function LedgerPage() {
       toast.error("Could not connect to API. Displaying demo data.");
     }
   }, []);
-
   useEffect(() => {
     setMounted(true);
 
