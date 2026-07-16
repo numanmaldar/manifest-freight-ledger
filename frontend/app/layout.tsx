@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Manifest — Freight Rate Intelligence",
@@ -37,7 +38,7 @@ export default function RootLayout({
             }}
           >
             <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-              <a href="/" className="flex items-center gap-3 group">
+              <Link href="/" className="flex items-center gap-3 group">
                 {/* Ship Logo */}
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:shadow-lg"
@@ -60,7 +61,7 @@ export default function RootLayout({
                     .
                   </span>
                 </div>
-              </a>
+              </Link>
 
               <div className="flex items-center gap-6">
                 <span className="hidden sm:block text-[11px] uppercase tracking-[0.3em] font-medium" style={{ color: "var(--ink-faint)" }}>

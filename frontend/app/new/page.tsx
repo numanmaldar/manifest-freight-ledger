@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const CONTAINER_TYPES = ["20GP", "40GP", "40HC", "45HC"];
 
@@ -15,8 +16,6 @@ function formatSerial(d: Date) {
 export default function NewRatePage() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
   const serial = useMemo(() => formatSerial(new Date()), []);
   const today = useMemo(() => new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }), []);
 
@@ -29,8 +28,6 @@ export default function NewRatePage() {
     currency: "USD",
     valid_date: new Date().toISOString().slice(0, 10),
   });
-
-  useEffect(() => { setMounted(true); }, []);
 
   function update<K extends keyof typeof form>(key: K, value: (typeof form)[K]) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -59,7 +56,7 @@ export default function NewRatePage() {
   const label = "text-[11px] uppercase tracking-widest font-medium";
 
   return (
-    <div className={`max-w-2xl mx-auto px-6 py-10 ${mounted ? "animate-fade-up" : "opacity-0"}`}>
+    <div className="max-w-2xl mx-auto px-6 py-10 animate-fade-up">
       {/* Header */}
       <div className="flex items-baseline justify-between mb-8">
         <div>
@@ -159,9 +156,9 @@ export default function NewRatePage() {
               <button type="submit" disabled={submitting} className="seal-button px-7 py-2.5 text-sm font-semibold rounded-sm disabled:opacity-50">
                 {submitting ? "Saving…" : "Save entry"}
               </button>
-              <a href="/" className="text-sm font-medium transition-colors hover:text-white" style={{ color: "var(--ink-dim)" }}>
+              <Link href="/" className="text-sm font-medium text-[var(--ink-dim)] transition-colors hover:text-white">
                 Cancel
-              </a>
+              </Link>
             </div>
           </form>
         </div>

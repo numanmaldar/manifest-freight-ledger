@@ -15,8 +15,8 @@ app = FastAPI(title="Freight Rate Tracker API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",
-        "https://your-vercel-app-name.vercel.app" # <-- Add your deployed frontend URL here
+        "http://localhost:3000", # For local development
+        "https://your-app-name.vercel.app" # <-- REPLACE with your actual Vercel URL
     ],
     allow_credentials=True,
     allow_methods=["*"],
