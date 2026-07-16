@@ -237,23 +237,23 @@ export default function LedgerPage() {
       <section className={`flex flex-col md:flex-row md:items-end md:justify-between gap-6 ${mounted ? "animate-fade-up" : "opacity-0"}`}>
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <AnchorIcon className="w-4 h-4" style={{ color: "var(--brass)" }} />
-            <p className="uppercase tracking-[0.3em] text-[11px] font-medium" style={{ color: "var(--brass)" }}>
+            <AnchorIcon className="w-4 h-4 text-[var(--brass)]" />
+            <p className="uppercase tracking-[0.3em] text-[11px] font-medium text-[var(--brass)]">
               Freight Intelligence
             </p>
           </div>
           <h1 className="font-display text-4xl md:text-5xl font-bold leading-tight tracking-tight">
             Rate <span className="gradient-text">Ledger</span>
           </h1>
-          <p className="mt-3 max-w-lg text-sm leading-relaxed" style={{ color: "var(--ink-dim)" }}>
+          <p className="mt-3 max-w-lg text-sm leading-relaxed text-[var(--ink-dim)]">
             Real-time ocean freight rate tracking with live vessel positions, port weather, and market data.
           </p>
         </div>
         <div className="flex items-center gap-3">
           {exchangeRate && (
             <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid var(--hairline)" }}>
-              <span className="text-[10px] uppercase tracking-wider" style={{ color: "var(--ink-faint)" }}>USD/EUR</span>
-              <span className="font-mono-data text-sm font-bold" style={{ color: "var(--brass)" }}>{exchangeRate.rate.toFixed(4)}</span>
+              <span className="text-[10px] uppercase tracking-wider text-[var(--ink-faint)]">USD/EUR</span>
+              <span className="font-mono-data text-sm font-bold text-[var(--brass)]">{exchangeRate.rate.toFixed(4)}</span>
             </div>
           )}
           <Link href="/new" className="seal-button px-6 py-3 text-sm text-center inline-flex items-center gap-2 shrink-0">
@@ -267,17 +267,17 @@ export default function LedgerPage() {
         {kpiData.map((kpi, i) => (
           <div key={kpi.label} className={`kpi-card p-5 ${mounted ? "animate-fade-up" : "opacity-0"} stagger-${i + 1}`} style={{ "--accent": kpi.accent } as React.CSSProperties}>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-[11px] uppercase tracking-[0.15em] font-medium" style={{ color: "var(--ink-dim)" }}>{kpi.label}</span>
+              <span className="text-[11px] uppercase tracking-[0.15em] font-medium text-[var(--ink-dim)]">{kpi.label}</span>
               <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: kpi.accentBg, border: `1px solid ${kpi.accentBorder}`, color: kpi.accent }}>
                 {kpi.icon}
               </div>
             </div>
-            <div className="text-2xl md:text-3xl font-bold font-mono-data tracking-tight" style={{ color: "var(--ink)" }}>
+            <div className="text-2xl md:text-3xl font-bold font-mono-data tracking-tight text-[var(--ink)]">
               <AnimatedCounter value={kpi.value} prefix={kpi.prefix || ""} />
             </div>
             <div className="flex items-center gap-1.5 mt-2">
-              <span className="text-xs font-medium" style={{ color: kpi.changeUp ? "var(--mint)" : "var(--coral)" }}>{kpi.change}</span>
-              <span className="text-[11px]" style={{ color: "var(--ink-faint)" }}>{kpi.sub}</span>
+              <span className={`text-xs font-medium ${kpi.changeUp ? "text-[var(--mint)]" : "text-[var(--coral)]"}`}>{kpi.change}</span>
+              <span className="text-[11px] text-[var(--ink-faint)]">{kpi.sub}</span>
             </div>
           </div>
         ))}
@@ -289,17 +289,17 @@ export default function LedgerPage() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: "var(--mint)", boxShadow: "0 0 8px var(--mint-glow)" }} />
-              <span className="text-[11px] uppercase tracking-[0.2em] font-medium" style={{ color: "var(--mint)" }}>Live Market Rates</span>
+              <span className="text-[11px] uppercase tracking-[0.2em] font-medium text-[var(--mint)]">Live Market Rates</span>
             </div>
-            <span className="text-[10px]" style={{ color: "var(--ink-faint)" }}>Updated: {marketRates[0]?.lastUpdated}</span>
+            <span className="text-[10px] text-[var(--ink-faint)]">Updated: {marketRates[0]?.lastUpdated}</span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
             {marketRates.map((mr) => (
               <div key={mr.route} className="p-3 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--hairline)" }}>
-                <div className="text-[10px] uppercase tracking-wider mb-1 truncate" style={{ color: "var(--ink-faint)" }}>{mr.route}</div>
+                <div className="text-[10px] uppercase tracking-wider mb-1 truncate text-[var(--ink-faint)]">{mr.route}</div>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-mono-data text-lg font-bold" style={{ color: "var(--ink)" }}>${mr.rate.toLocaleString()}</span>
-                  <span className="text-[10px] font-medium flex items-center gap-0.5" style={{ color: mr.trend === "up" ? "var(--coral)" : mr.trend === "down" ? "var(--mint)" : "var(--ink-dim)" }}>
+                  <span className="font-mono-data text-lg font-bold text-[var(--ink)]">${mr.rate.toLocaleString()}</span>
+                  <span className={`text-[10px] font-medium flex items-center gap-0.5 ${mr.trend === "up" ? "text-[var(--coral)]" : mr.trend === "down" ? "text-[var(--mint)]" : "text-[var(--ink-dim)]"}`}>
                     {mr.trend === "up" ? <TrendUpIcon className="w-3 h-3" /> : mr.trend === "down" ? <TrendDownIcon className="w-3 h-3" /> : <span>—</span>}
                     {Math.abs(mr.change)}%
                   </span>
@@ -314,8 +314,8 @@ export default function LedgerPage() {
       {weather.length > 0 && (
         <section className={`${mounted ? "animate-fade-up stagger-3" : "opacity-0"}`}>
           <div className="flex items-center gap-3 mb-4">
-            <SunIcon className="w-4 h-4" style={{ color: "var(--brass)" }} />
-            <span className="text-[11px] uppercase tracking-[0.2em] font-medium" style={{ color: "var(--ink-dim)" }}>Port Weather Conditions</span>
+            <SunIcon className="w-4 h-4 text-[var(--brass)]" />
+            <span className="text-[11px] uppercase tracking-[0.2em] font-medium text-[var(--ink-dim)]">Port Weather Conditions</span>
             <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, var(--hairline), transparent)" }} />
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -327,17 +327,17 @@ export default function LedgerPage() {
                 </div>
                 <div className="flex items-baseline gap-2 mb-2">
                   <span className="text-2xl font-bold font-mono-data">{w.temp}°</span>
-                  <span className="text-[11px]" style={{ color: "var(--ink-faint)" }}>feels {w.feelsLike}°</span>
+                  <span className="text-[11px] text-[var(--ink-faint)]">feels {w.feelsLike}°</span>
                 </div>
-                <div className="text-[11px] mb-3" style={{ color: "var(--ink-dim)" }}>{w.description}</div>
+                <div className="text-[11px] mb-3 text-[var(--ink-dim)]">{w.description}</div>
                 <div className="grid grid-cols-2 gap-2 text-[10px]">
                   <div className="flex items-center gap-1">
-                    <WindIcon className="w-3 h-3" style={{ color: "var(--ink-faint)" }} />
-                    <span style={{ color: "var(--ink-faint)" }}>{w.windSpeed} km/h {getWindDirection(w.windDeg)}</span>
+                    <WindIcon className="w-3 h-3 text-[var(--ink-faint)]" />
+                    <span className="text-[var(--ink-faint)]">{w.windSpeed} km/h {getWindDirection(w.windDeg)}</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <DropletIcon className="w-3 h-3" style={{ color: "var(--ink-faint)" }} />
-                    <span style={{ color: "var(--ink-faint)" }}>{w.humidity}%</span>
+                    <DropletIcon className="w-3 h-3 text-[var(--ink-faint)]" />
+                    <span className="text-[var(--ink-faint)]">{w.humidity}%</span>
                   </div>
                 </div>
               </div>
@@ -350,8 +350,8 @@ export default function LedgerPage() {
       {congestion.length > 0 && (
         <section className={`${mounted ? "animate-fade-up stagger-4" : "opacity-0"}`}>
           <div className="flex items-center gap-3 mb-4">
-            <ContainerIcon className="w-4 h-4" style={{ color: "var(--brass)" }} />
-            <span className="text-[11px] uppercase tracking-[0.2em] font-medium" style={{ color: "var(--ink-dim)" }}>Port Congestion</span>
+            <ContainerIcon className="w-4 h-4 text-[var(--brass)]" />
+            <span className="text-[11px] uppercase tracking-[0.2em] font-medium text-[var(--ink-dim)]">Port Congestion</span>
             <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, var(--hairline), transparent)" }} />
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
@@ -363,16 +363,16 @@ export default function LedgerPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-[11px]">
                   <div>
-                    <span style={{ color: "var(--ink-faint)" }}>At Anchor</span>
+                    <span className="text-[var(--ink-faint)]">At Anchor</span>
                     <div className="font-mono-data font-bold">{c.vesselsAtAnchor}</div>
                   </div>
                   <div>
-                    <span style={{ color: "var(--ink-faint)" }}>At Berth</span>
+                    <span className="text-[var(--ink-faint)]">At Berth</span>
                     <div className="font-mono-data font-bold">{c.vesselsAtBerth}</div>
                   </div>
                 </div>
-                <div className="mt-2 text-[10px]" style={{ color: "var(--ink-faint)" }}>
-                  Avg wait: <span className="font-mono-data font-semibold" style={{ color: "var(--ink)" }}>{c.avgWaitDays}d</span>
+                <div className="mt-2 text-[10px] text-[var(--ink-faint)]">
+                  Avg wait: <span className="font-mono-data font-semibold text-[var(--ink)]">{c.avgWaitDays}d</span>
                 </div>
               </div>
             ))}
@@ -385,12 +385,12 @@ export default function LedgerPage() {
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="relative flex-1">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 opacity-40">
-              <SearchIcon className="w-[18px] h-[18px]" style={{ color: "var(--ink-dim)" }} />
+              <SearchIcon className="w-[18px] h-[18px] text-[var(--ink-dim)]" />
             </div>
             <input type="text" placeholder="Search routes, carriers, ports..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="search-field" />
             {searchQuery && (
               <button onClick={() => setSearchQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100 transition-opacity">
-                <CloseIcon className="w-4 h-4" style={{ color: "var(--ink-dim)" }} />
+                <CloseIcon className="w-4 h-4 text-[var(--ink-dim)]" />
               </button>
             )}
           </div>
@@ -441,28 +441,28 @@ export default function LedgerPage() {
             <table className="w-full">
               <thead>
                 <tr className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "var(--ink-faint)" }}>
-                  <th className="text-left pb-3">Vessel</th>
-                  <th className="text-left pb-3">IMO</th>
-                  <th className="text-left pb-3">Status</th>
-                  <th className="text-left pb-3">Destination</th>
-                  <th className="text-left pb-3">ETA</th>
-                  <th className="text-right pb-3">Speed</th>
+                  <th className="pb-3 text-left">Vessel</th>
+                  <th className="pb-3 text-left">IMO</th>
+                  <th className="pb-3 text-left">Status</th>
+                  <th className="pb-3 text-left">Destination</th>
+                  <th className="pb-3 text-left">ETA</th>
+                  <th className="pb-3 text-right">Speed</th>
                 </tr>
               </thead>
               <tbody>
                 {vessels.map((vessel) => (
                   <tr key={vessel.mmsi} className="border-t" style={{ borderColor: "var(--hairline)" }}>
-                    <td className="py-3 pr-4">
+                    <td className="py-3 pr-4 ">
                       <div className="flex items-center gap-2">
-                        <ShipIcon className="w-5 h-5" style={{ color: "var(--teal)" }} />
+                        <ShipIcon className="w-5 h-5 text-[var(--teal)]" />
                         <span className="font-semibold text-sm">{vessel.ship_name}</span>
                       </div>
                     </td>
-                    <td className="py-3 pr-4 font-mono-data text-sm" style={{ color: "var(--ink-dim)" }}>{vessel.imo}</td>
+                    <td className="py-3 pr-4 font-mono-data text-sm text-[var(--ink-dim)]">{vessel.imo}</td>
                     <td className="py-3 pr-4"><StatusBadge status={vessel.status} /></td>
-                    <td className="py-3 pr-4 text-sm">{vessel.destination}</td>
-                    <td className="py-3 pr-4 font-mono-data text-sm" style={{ color: "var(--ink-dim)" }}>{vessel.eta}</td>
-                    <td className="py-3 text-right font-mono-data text-sm font-bold" style={{ color: "var(--brass)" }}>{vessel.speed} kn</td>
+                    <td className="py-3 pr-4 text-sm ">{vessel.destination}</td>
+                    <td className="py-3 pr-4 font-mono-data text-sm text-[var(--ink-dim)]">{vessel.eta}</td>
+                    <td className="py-3 font-mono-data text-sm font-bold text-right text-[var(--brass)]">{vessel.speed} kn</td>
                   </tr>
                 ))}
               </tbody>
@@ -493,7 +493,7 @@ export default function LedgerPage() {
       {!loadError && filteredRates.length === 0 && (
         <div className="manifest-card text-center py-20 px-10 animate-fade-up">
           <div className="flex justify-center mb-5">
-            <ShipIcon className="w-16 h-16 animate-float" style={{ color: "var(--brass)", opacity: 0.5 }} />
+            <ShipIcon className="w-16 h-16 animate-float text-[var(--brass)] opacity-50" />
           </div>
           <h2 className="font-display text-2xl md:text-3xl font-bold mb-3">{searchQuery || activeCarrier !== "All" ? "No matches found" : "No Rates Logged"}</h2>
           <p className="max-w-md mx-auto mb-8 text-sm" style={{ color: "var(--ink-dim)" }}>
