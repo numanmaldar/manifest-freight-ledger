@@ -27,7 +27,7 @@ export function RateCard({ rate, history = [], index = 0, onDelete }: Props) {
   const isExpired = new Date(rate.valid_date) < new Date();
 
   return (
-    <div className="freight-card p-6 group" style={{ animationDelay: `${index * 0.06}s` }}>
+    <div className="freight-card p-6 group relative" style={{ animationDelay: `${index * 0.06}s` }}>
       {/* Top Row */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
         <div className="flex-1 min-w-0">
