@@ -166,8 +166,6 @@ export default function LedgerPage() {
     }
   }, []);
   useEffect(() => {
-    setMounted(true);
-
     fetchRates();
 
     const fetchLiveData = async () => {
@@ -231,7 +229,7 @@ export default function LedgerPage() {
   return (
     <div className="space-y-8">
       {/* Hero */}
-      <section className={`flex flex-col md:flex-row md:items-end md:justify-between gap-6 ${mounted ? "animate-fade-up" : "opacity-0"}`}>
+      <section className="flex flex-col animate-fade-up md:flex-row md:items-end md:justify-between gap-6">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <AnchorIcon className="w-4 h-4 text-[var(--brass)]" />
@@ -262,7 +260,7 @@ export default function LedgerPage() {
       {/* KPI Cards */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {kpiData.map((kpi, i) => (
-          <div key={kpi.label} className={`kpi-card p-5 ${mounted ? "animate-fade-up" : "opacity-0"} stagger-${i + 1}`} style={{ "--accent": kpi.accent } as React.CSSProperties}>
+          <div key={kpi.label} className={`kpi-card p-5 animate-fade-up stagger-${i + 1}`} style={{ "--accent": kpi.accent } as React.CSSProperties}>
             <div className="flex items-center justify-between mb-3">
               <span className="text-[11px] uppercase tracking-[0.15em] font-medium text-[var(--ink-dim)]">{kpi.label}</span>
               <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: kpi.accentBg, border: `1px solid ${kpi.accentBorder}`, color: kpi.accent }}>
@@ -282,7 +280,7 @@ export default function LedgerPage() {
 
       {/* Live Market Ticker */}
       {marketRates.length > 0 && (
-        <section className={`manifest-card p-5 overflow-hidden ${mounted ? "animate-fade-up stagger-2" : "opacity-0"}`}>
+        <section className="manifest-card p-5 overflow-hidden animate-fade-up stagger-2">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: "var(--mint)", boxShadow: "0 0 8px var(--mint-glow)" }} />
@@ -309,7 +307,7 @@ export default function LedgerPage() {
 
       {/* Port Weather */}
       {weather.length > 0 && (
-        <section className={`${mounted ? "animate-fade-up stagger-3" : "opacity-0"}`}>
+        <section className="animate-fade-up stagger-3">
           <div className="flex items-center gap-3 mb-4">
             <SunIcon className="w-4 h-4 text-[var(--brass)]" />
             <span className="text-[11px] uppercase tracking-[0.2em] font-medium text-[var(--ink-dim)]">Port Weather Conditions</span>
@@ -345,7 +343,7 @@ export default function LedgerPage() {
 
       {/* Port Congestion */}
       {congestion.length > 0 && (
-        <section className={`${mounted ? "animate-fade-up stagger-4" : "opacity-0"}`}>
+        <section className="animate-fade-up stagger-4">
           <div className="flex items-center gap-3 mb-4">
             <ContainerIcon className="w-4 h-4 text-[var(--brass)]" />
             <span className="text-[11px] uppercase tracking-[0.2em] font-medium text-[var(--ink-dim)]">Port Congestion</span>
@@ -378,7 +376,7 @@ export default function LedgerPage() {
       )}
 
       {/* Search & Filters */}
-      <section className={`space-y-4 ${mounted ? "animate-fade-up stagger-5" : "opacity-0"}`}>
+      <section className="space-y-4 animate-fade-up stagger-5">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="relative flex-1">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 opacity-40">
@@ -416,7 +414,7 @@ export default function LedgerPage() {
 
       {/* Vessel Map */}
       {showMap && vessels.length > 0 && (
-        <section className={`manifest-card p-6 overflow-hidden ${mounted ? "animate-fade-up stagger-6" : "opacity-0"}`}>
+        <section className="manifest-card p-6 overflow-hidden animate-fade-up stagger-6">
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-3">
               <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: "var(--teal)", boxShadow: "0 0 8px var(--teal-glow)" }} />
