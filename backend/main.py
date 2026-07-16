@@ -16,7 +16,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",  # For local development
-        "https://manifest-freight-ledger-xxxx.vercel.app"  # <-- REPLACE with your actual Vercel URL
+        "https://manifest-freight-ledger-v8ys.vercel.app"  # <-- Example: Replace with your actual Vercel URL
     ],
     allow_credentials=True,
     allow_methods=["*"],
