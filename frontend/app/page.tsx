@@ -144,7 +144,6 @@ export default function LedgerPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCarrier, setActiveCarrier] = useState("All");
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
-  const [mounted, setMounted] = useState(false);
   const [exchangeRate, setExchangeRate] = useState<{ rate: number; date: string } | null>(null);
   const [vessels, setVessels] = useState<VesselPosition[]>([]);
   const [congestion, setCongestion] = useState<PortCongestion[]>([]);
