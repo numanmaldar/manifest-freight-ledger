@@ -165,27 +165,27 @@ export default function LedgerPage() {
     }
   }, []);
   useEffect(() => {
-    fetchRates();
-
     const fetchLiveData = async () => {
       const [rate, ships, market] = await Promise.all([
         getExchangeRate("USD", "EUR"),
         getVesselPositions(PORT_COORDS[selectedPort]?.lat || 51.95, PORT_COORDS[selectedPort]?.lon || 4.05),
         getMarketRates(),
       ]);
-      setExchangeRate(rate);
-      setVessels(ships);
-      setMarketRates(market);
-
+      
       const uniquePorts = [...new Set(DEMO_RATES.map((r) => r.destination_port))];
       const [congestionData, weatherData] = await Promise.all([
         Promise.all(uniquePorts.map((p) => getPortCongestion(p))),
         Promise.all(uniquePorts.slice(0, 4).map((p) => getPortWeather(p))),
       ]);
+
+      setExchangeRate(rate);
+      setVessels(ships);
+      setMarketRates(market);
       setCongestion(congestionData);
       setWeather(weatherData);
     };
 
+    fetchRates();
     fetchLiveData();
 
     const interval = setInterval(fetchLiveData, 30000);
