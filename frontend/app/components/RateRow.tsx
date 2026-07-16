@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FreightRate } from "@/lib/api";
 import { CARRIER_STYLES } from "@/lib/constants";
 import { PencilIcon, TrashIcon } from "./icons";
@@ -72,6 +73,9 @@ export function RateRow({ rate, isEven, onDelete }: RateRowProps) {
 
       {/* Actions */}
       <div className="col-span-12 sm:col-span-2 flex items-center justify-end gap-2 mt-3 sm:mt-0">
+        <Link href={`/edit/${rate.id}`} className="p-2 rounded-md transition-colors hover:bg-white/5" title="Edit Rate">
+          <PencilIcon className="w-4 h-4 text-[var(--sky)]" />
+        </Link>
         <button onClick={() => onDelete(rate.id)} className="p-2 rounded-md transition-colors hover:bg-white/5" title="Delete Rate">
           <TrashIcon className="w-4 h-4 text-[var(--coral)]" />
         </button>
