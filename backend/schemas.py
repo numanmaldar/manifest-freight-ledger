@@ -1,6 +1,6 @@
 from datetime import date
 from pydantic import BaseModel, ConfigDict
-
+from typing import Optional
 
 class FreightRateBase(BaseModel):
     origin_port: str
@@ -14,6 +14,15 @@ class FreightRateBase(BaseModel):
 
 class FreightRateCreate(FreightRateBase):
     pass
+
+class FreightRateUpdate(BaseModel):
+    origin_port: Optional[str] = None
+    destination_port: Optional[str] = None
+    carrier: Optional[str] = None
+    container_type: Optional[str] = None
+    rate: Optional[float] = None
+    currency: Optional[str] = None
+    valid_date: Optional[date] = None
 
 
 class FreightRateOut(FreightRateBase):

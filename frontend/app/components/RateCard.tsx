@@ -1,12 +1,15 @@
 "use client";
 
 import { FreightRate } from "@/lib/api";
+import Link from "next/link";
+import { PencilIcon, TrashIcon } from "./icons";
 import { Sparkline } from "./Sparkline";
 
 type Props = {
   rate: FreightRate;
   history?: number[];
   index?: number;
+  onDelete: (id: number) => void;
 };
 
 const CARRIER_STYLES: Record<string, { bg: string; border: string; color: string }> = {
@@ -19,12 +22,12 @@ const CARRIER_STYLES: Record<string, { bg: string; border: string; color: string
   ONE: { bg: "rgba(212,168,75,0.1)", border: "rgba(212,168,75,0.25)", color: "#d4a84b" },
 };
 
-export function RateCard({ rate, history = [], index = 0 }: Props) {
+export function RateCard({ rate, history = [], index = 0, onDelete }: Props) {
   const style = CARRIER_STYLES[rate.carrier] || { bg: "rgba(255,255,255,0.03)", border: "rgba(255,255,255,0.08)", color: "#8b9aab" };
   const isExpired = new Date(rate.valid_date) < new Date();
 
   return (
-    <div className="freight-card p-6" style={{ animationDelay: `${index * 0.06}s` }}>
+    <div className="freight-card p-6 group" style={{ animationDelay: `${index * 0.06}s` }}>
       {/* Top Row */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
         <div className="flex-1 min-w-0">
@@ -50,6 +53,16 @@ export function RateCard({ rate, history = [], index = 0 }: Props) {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Action Buttons - Appear on Hover */}
+      <div className="absolute top-4 right-4 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <Link href={`/rates/${rate.id}/edit`} className="p-2 rounded-md transition-colors bg-black/10 hover:bg-black/30 backdrop-blur-sm" title="Edit Rate">
+          <PencilIcon className="w-4 h-4 text-[var(--ink-dim)]" />
+        </Link>
+        <button onClick={() => onDelete(rate.id)} className="p-2 rounded-md transition-colors bg-black/10 hover:bg-black/30 backdrop-blur-sm" title="Delete Rate">
+          <TrashIcon className="w-4 h-4 text-[var(--coral)]" />
+        </button>
       </div>
 
       {/* Bottom Row */}

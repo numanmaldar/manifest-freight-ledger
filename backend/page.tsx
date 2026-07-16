@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { FreightRate } from "@/lib/api";
 
 const CONTAINER_TYPES = ["20GP", "40GP", "40HC", "45HC"];
 
@@ -13,9 +14,10 @@ function formatSerial(d: Date) {
   return `MF-${y}-${seq}`;
 }
 
-export default function NewRatePage() {
+export default function EditRatePage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
   const serial = useMemo(() => formatSerial(new Date()), []);
   const today = useMemo(() => new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }), []);
 
@@ -29,6 +31,28 @@ export default function NewRatePage() {
     valid_date: new Date().toISOString().slice(0, 10),
   });
 
+  useEffect(() => {
+    const fetchRate = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8000"}/rates/${params.id}`);
+        if (!res.ok) throw new Error("Rate not found");
+        const rate: FreightRate = await res.json();
+        setForm({
+          ...rate,
+          rate: String(rate.rate),
+          valid_date: new Date(rate.valid_date).toISOString().slice(0, 10),
+        });
+      } catch (error) {
+        toast.error("Could not load rate data.");
+        router.push("/");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRate();
+  }, [params.id, router]);
+
   function update<K extends keyof typeof form>(key: K, value: (typeof form)[K]) {
     setForm((f) => ({ ...f, [key]: value }));
   }
@@ -37,16 +61,17 @@ export default function NewRatePage() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8000"}/rates`, {
-        method: "POST",
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8000"}/rates/${params.id}`, {
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, rate: parseFloat(form.rate) }),
       });
-      if (!res.ok) throw new Error("Failed");
-      toast.success("Rate logged successfully!");
+      if (!res.ok) throw new Error("Failed to update");
+      toast.success("Rate updated successfully!");
       router.push("/");
+      router.refresh(); // Refresh server components on the home page
     } catch {
-      toast.error("Could not save entry. Check the API and try again.");
+      toast.error("Could not save changes. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -55,33 +80,37 @@ export default function NewRatePage() {
   const field = "ruled-field w-full text-sm";
   const label = "text-[11px] uppercase tracking-widest font-medium";
 
+  if (loading) {
+    return <div className="text-center py-20">Loading rate data...</div>;
+  }
+
   return (
     <div className="max-w-2xl mx-auto px-6 py-10 animate-fade-up">
       {/* Header */}
       <div className="flex items-baseline justify-between mb-8">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-[var(--brass)]" />
-            <p className="text-[11px] uppercase tracking-[0.3em] font-medium text-[var(--brass)]">
-              New Entry
+            <div className="w-1.5 h-1.5 rounded-full" style={{ background: "var(--brass)" }} />
+            <p className="text-[11px] uppercase tracking-[0.3em] font-medium" style={{ color: "var(--brass)" }}>
+              Edit Entry
             </p>
           </div>
-          <h1 className="font-display text-3xl font-bold tracking-tight">Log a rate</h1>
-          <p className="mt-2 text-sm text-[var(--ink-dim)]">
-            Record a quoted or confirmed freight rate for the ledger.
+          <h1 className="font-display text-3xl font-bold tracking-tight">Update rate</h1>
+          <p className="text-sm mt-2" style={{ color: "var(--ink-dim)" }}>
+            Modify the details for this freight rate entry.
           </p>
         </div>
-        <div className="space-y-1 text-right font-mono-data text-xs text-[var(--ink-faint)]">
+        <div className="text-right font-mono-data text-xs space-y-1" style={{ color: "var(--ink-faint)" }}>
           <div className="flex items-center gap-2 justify-end">
             <span className="text-[10px] uppercase tracking-wider">No.</span>
-            <span className="text-[var(--ink-dim)]">{serial}</span>
+            <span style={{ color: "var(--ink-dim)" }}>{serial}</span>
           </div>
-          <div>{today}</div>
+          <div style={{ color: "var(--ink-faint)" }}>{today}</div>
         </div>
       </div>
 
       {/* Form Card */}
-      <div className="manifest-card">
+      <div className="manifest-card" style={{ borderColor: "var(--hairline)" }}>
         <span className="corner-tl" />
         <span className="corner-tr" />
         <span className="corner-bl" />
@@ -89,13 +118,7 @@ export default function NewRatePage() {
 
         <div className="px-8 py-8">
           <form onSubmit={handleSubmit}>
-            {/* Section 1: Route */}
-            <div className="flex items-center gap-3 mb-6 pb-3 border-b" style={{ borderColor: "var(--hairline)" }}>
-              <span className="text-[11px] uppercase tracking-widest px-2.5 py-1 rounded-md font-medium" style={{ border: "1px solid rgba(212,168,75,0.2)", color: "var(--brass)", background: "rgba(212,168,75,0.04)" }}>
-                Shipment Route
-              </span>
-              <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, var(--hairline), transparent)" }} />
-            </div>
+            {/* Route */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5 mb-8">
               <div>
                 <label className={`${label} mb-2 block`} style={{ color: "var(--ink-dim)" }}>Origin port</label>
@@ -107,13 +130,7 @@ export default function NewRatePage() {
               </div>
             </div>
 
-            {/* Section 2: Carrier */}
-            <div className="flex items-center gap-3 mb-6 pb-3 border-b" style={{ borderColor: "var(--hairline)" }}>
-              <span className="text-[11px] uppercase tracking-widest px-2.5 py-1 rounded-md font-medium" style={{ border: "1px solid rgba(212,168,75,0.2)", color: "var(--brass)", background: "rgba(212,168,75,0.04)" }}>
-                Carrier & Cargo
-              </span>
-              <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, var(--hairline), transparent)" }} />
-            </div>
+            {/* Carrier & Cargo */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5 mb-8">
               <div>
                 <label className={`${label} mb-2 block`} style={{ color: "var(--ink-dim)" }}>Carrier</label>
@@ -129,13 +146,7 @@ export default function NewRatePage() {
               </div>
             </div>
 
-            {/* Section 3: Rate */}
-            <div className="flex items-center gap-3 mb-6 pb-3 border-b" style={{ borderColor: "var(--hairline)" }}>
-              <span className="text-[11px] uppercase tracking-widest px-2.5 py-1 rounded-md font-medium" style={{ border: "1px solid rgba(212,168,75,0.2)", color: "var(--brass)", background: "rgba(212,168,75,0.04)" }}>
-                Rate & Validity
-              </span>
-              <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, var(--hairline), transparent)" }} />
-            </div>
+            {/* Rate & Validity */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-5 mb-8">
               <div>
                 <label className={`${label} mb-2 block`} style={{ color: "var(--ink-dim)" }}>Valid date</label>
@@ -154,7 +165,7 @@ export default function NewRatePage() {
             {/* Actions */}
             <div className="flex items-center gap-4 pt-2">
               <button type="submit" disabled={submitting} className="seal-button px-7 py-2.5 text-sm font-semibold rounded-sm disabled:opacity-50">
-                {submitting ? "Saving…" : "Save entry"}
+                {submitting ? "Updating…" : "Update Entry"}
               </button>
               <Link href="/" className="text-sm font-medium text-[var(--ink-dim)] transition-colors hover:text-white">
                 Cancel

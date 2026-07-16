@@ -1,8 +1,11 @@
 import { FreightRate } from "@/lib/api";
+import Link from "next/link";
+import { PencilIcon, TrashIcon } from "./icons";
 
 type RateRowProps = {
   rate: FreightRate;
   isEven: boolean;
+  onDelete: (id: number) => void;
 };
 
 const CARRIER_STYLES: Record<string, { bg: string; border: string; color: string }> = {
@@ -15,7 +18,7 @@ const CARRIER_STYLES: Record<string, { bg: string; border: string; color: string
   ONE: { bg: "rgba(212,168,75,0.1)", border: "rgba(212,168,75,0.25)", color: "#d4a84b" },
 };
 
-export function RateRow({ rate, isEven }: RateRowProps) {
+export function RateRow({ rate, isEven, onDelete }: RateRowProps) {
   const style = CARRIER_STYLES[rate.carrier] || { bg: "rgba(255,255,255,0.03)", border: "rgba(255,255,255,0.08)", color: "#8b9aab" };
   const isExpired = new Date(rate.valid_date) < new Date();
 
@@ -28,7 +31,7 @@ export function RateRow({ rate, isEven }: RateRowProps) {
       }}
     >
       {/* Route */}
-      <div className="col-span-12 sm:col-span-4 mb-2 sm:mb-0">
+      <div className="col-span-12 sm:col-span-3 mb-2 sm:mb-0">
         <div className="font-semibold text-[15px] flex items-center gap-1.5 flex-wrap">
           <span>{rate.origin_port}</span>
           <span style={{ color: "var(--teal)", fontWeight: 800 }}>→</span>
@@ -54,7 +57,7 @@ export function RateRow({ rate, isEven }: RateRowProps) {
       </div>
 
       {/* Valid Date */}
-      <div className="col-span-6 sm:col-span-2">
+      <div className="col-span-6 sm:col-span-2 mb-2 sm:mb-0">
         <div className="flex items-center gap-2">
           <span className="font-mono-data text-sm font-medium" style={{ color: isExpired ? "var(--coral)" : "var(--ink-dim)" }}>
             {rate.valid_date}
@@ -71,13 +74,20 @@ export function RateRow({ rate, isEven }: RateRowProps) {
       </div>
 
       {/* Rate */}
-      <div className="col-span-6 sm:col-span-2 text-right">
+      <div className="col-span-6 sm:col-span-1 text-right">
         <div className="font-mono-data text-lg font-bold tracking-tight" style={{ color: "var(--brass)" }}>
           {rate.currency} {rate.rate.toLocaleString(undefined, { minimumFractionDigits: 2 })}
         </div>
-        <div className="text-[10px] uppercase tracking-widest mt-1 font-medium" style={{ color: "var(--ink-faint)" }}>
-          Freight Rate
-        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="col-span-12 sm:col-span-2 flex items-center justify-end gap-2 mt-3 sm:mt-0">
+        <Link href={`/rates/${rate.id}/edit`} className="p-2 rounded-md transition-colors hover:bg-white/5" title="Edit Rate">
+          <PencilIcon className="w-4 h-4 text-[var(--ink-dim)]" />
+        </Link>
+        <button onClick={() => onDelete(rate.id)} className="p-2 rounded-md transition-colors hover:bg-white/5" title="Delete Rate">
+          <TrashIcon className="w-4 h-4 text-[var(--coral)]" />
+        </button>
       </div>
     </div>
   );

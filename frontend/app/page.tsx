@@ -218,6 +218,22 @@ useEffect(() => {
     exportToPdf(filteredRates);
   };
 
+  const handleDelete = async (rateId: number) => {
+    if (!window.confirm("Are you sure you want to delete this rate? This action cannot be undone.")) {
+      return;
+    }
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8000"}/rates/${rateId}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Failed to delete");
+      toast.success("Rate deleted successfully.");
+      setRates((prevRates) => prevRates.filter((r) => r.id !== rateId));
+    } catch (error) {
+      toast.error("Could not delete rate. Please try again.");
+    }
+  };
+
   const kpis = useMemo(() => {
     const total = rates.length;
     const carriers = new Set(rates.map((r) => r.carrier)).size;
@@ -529,6 +545,7 @@ useEffect(() => {
                 .filter((r) => r.origin_port === rate.origin_port && r.destination_port === rate.destination_port && r.container_type === rate.container_type)
                 .sort((a, b) => new Date(a.valid_date).getTime() - new Date(b.valid_date).getTime())
                 .map((r) => r.rate)}
+              onDelete={handleDelete}
             />
           ))}
         </section>
@@ -537,15 +554,16 @@ useEffect(() => {
       {/* Table View */}
       {viewMode === "table" && filteredRates.length > 0 && (
         <section className="manifest-card overflow-hidden">
-          <div className="grid grid-cols-12 px-6 py-4 border-b text-[11px] uppercase tracking-[0.2em] font-medium" style={{ borderColor: "var(--hairline)", background: "linear-gradient(to right, rgba(255,255,255,0.03), rgba(255,255,255,0.015))", color: "var(--ink-dim)" }}>
-            <div className="col-span-4">Route</div>
+          <div className="hidden sm:grid grid-cols-12 px-6 py-4 border-b text-[11px] uppercase tracking-[0.2em] font-medium" style={{ borderColor: "var(--hairline)", background: "linear-gradient(to right, rgba(255,255,255,0.03), rgba(255,255,255,0.015))", color: "var(--ink-dim)" }}>
+            <div className="col-span-3">Route</div>
             <div className="col-span-2">Carrier</div>
             <div className="col-span-2">Container</div>
             <div className="col-span-2">Valid Until</div>
-            <div className="col-span-2 text-right">Rate</div>
+            <div className="col-span-1 text-right">Rate</div>
+            <div className="col-span-2 text-right">Actions</div>
           </div>
           {filteredRates.map((rate, index) => (
-            <RateRow key={rate.id} rate={rate} isEven={index % 2 !== 0} />
+            <RateRow key={rate.id} rate={rate} isEven={index % 2 !== 0} onDelete={handleDelete} />
           ))}
         </section>
       )}

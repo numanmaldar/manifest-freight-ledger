@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
@@ -49,3 +49,28 @@ def get_rate(rate_id: int, db: Session = Depends(get_db)):
     if not db_rate:
         raise HTTPException(status_code=404, detail="Rate not found")
     return db_rate
+
+
+@app.patch("/rates/{rate_id}", response_model=schemas.FreightRateOut)
+def update_rate(rate_id: int, rate_update: schemas.FreightRateUpdate, db: Session = Depends(get_db)):
+    db_rate = db.query(models.FreightRate).filter(models.FreightRate.id == rate_id).first()
+    if not db_rate:
+        raise HTTPException(status_code=404, detail="Rate not found")
+
+    update_data = rate_update.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(db_rate, key, value)
+
+    db.commit()
+    db.refresh(db_rate)
+    return db_rate
+
+
+@app.delete("/rates/{rate_id}", status_code=204)
+def delete_rate(rate_id: int, db: Session = Depends(get_db)):
+    db_rate = db.query(models.FreightRate).filter(models.FreightRate.id == rate_id).first()
+    if not db_rate:
+        raise HTTPException(status_code=404, detail="Rate not found")
+    db.delete(db_rate)
+    db.commit()
+    return Response(status_code=204)
