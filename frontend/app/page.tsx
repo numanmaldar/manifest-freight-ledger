@@ -165,9 +165,13 @@ export default function LedgerPage() {
     }
   }, []);
 
-  useEffect(() => {
-    fetchRates();
-  }, [fetchRates]);
+useEffect(() => {
+  const load = async () => {
+    await fetchRates();
+  };
+
+  load();
+}, []);
   
   useEffect(() => {
     const fetchLiveData = async () => {
