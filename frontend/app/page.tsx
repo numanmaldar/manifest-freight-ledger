@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { RateRow } from "./components/RateRow";
 import { RateCard } from "./components/RateCard";
@@ -140,7 +139,6 @@ function VesselMap({ vessels, selectedPort }: { vessels: VesselPosition[]; selec
 }
 
 export default function LedgerPage() {
-  const router = useRouter();
   const [rates, setRates] = useState<FreightRate[]>([]);
   const [loadError, setLoadError] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -155,6 +153,20 @@ export default function LedgerPage() {
   const [weather, setWeather] = useState<PortWeather[]>([]);
   const [selectedPort, setSelectedPort] = useState("Rotterdam");
   const [showMap, setShowMap] = useState(false);
+
+  const fetchRates = useCallback(async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8000"}/rates`);
+      if (!res.ok) throw new Error("Failed");
+      const data = await res.json();
+      setRates(data);
+      setLoadError(false);
+    } catch {
+      setRates(DEMO_RATES);
+      setLoadError(true);
+      toast.error("Could not connect to API. Displaying demo data.");
+    }
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -184,19 +196,7 @@ export default function LedgerPage() {
 
     const interval = setInterval(fetchLiveData, 30000);
     return () => clearInterval(interval);
-  }, [selectedPort]);
-
-  const fetchRates = async () => {
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8000"}/rates`);
-      if (!res.ok) throw new Error("Failed");
-      const data = await res.json();
-      setRates(data);
-    } catch {
-      setRates(DEMO_RATES);
-      setLoadError(true);
-    }
-  };
+  }, [selectedPort, fetchRates]);
 
   const filteredRates = useMemo(() => {
     return rates.filter((rate) => {
